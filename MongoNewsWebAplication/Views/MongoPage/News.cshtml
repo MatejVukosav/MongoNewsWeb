@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MongoNewsWebAplication.Models.News>
+
+@{
+    ViewBag.Title = "News";
+}
+
+<h2>News</h2>
+<p>
+    @Html.ActionLink("Create New", "CreateNews")
+</p>
+
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="row margin-top-10">
+            <div class="col-md-6">
+
+                <div>
+                    <h3>@Html.DisplayFor(modelItem => item.title)</h3>
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.createdAt)
+                </div>
+                <div>
+                    @Html.DisplayFor(modelItem => item.text)
+                </div>
+                <div>
+                    <b>@Html.DisplayFor(modelItem => item.author)</b>
+                </div>
+            </div>
+
+            @{
+                var base64 = Convert.ToBase64String(item.image);
+                var imgSrc = String.Format("data:image/jpg;base64,{0}", base64);
+            }
+            <div class="col-md-6">
+                <img class="img-news" src="@imgSrc" />
+            </div>
+
+            <div class="row">
+                <p>Comments:</p>
+                @foreach (var comment in item.comments)
+                {
+                    <div class="col-md-12">
+                        @Html.DisplayFor(modelItem => comment.text)
+                        @Html.DisplayFor(modelItem => comment.created)
+                    </div>
+                }
+                @using (Html.BeginForm("CreateComment", "MongoPage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.TextBox("newsId", item.id, new { @style = "display:none" })
+                    <div class="col-md-12">
+                        @Html.TextBox("text", "", new { @placeholder = "new comment" })
+                        <input class="btn btn-default" type="submit" value="Add comment" />
+                        @* @Html.ActionLink("newsId", "CreateComment", new { newsId = ViewBag.newsId, text = ViewBag.text })*@
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+                }

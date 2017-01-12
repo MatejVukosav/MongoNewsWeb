@@ -26,5 +26,6 @@ namespace MongoNewsWebAplication.Controllers
 
             return View();
         }
+
     }
 }
